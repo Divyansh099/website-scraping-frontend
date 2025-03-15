@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       // Make request to our Render backend server
-      const response = await fetch('https://your-backend-api.onrender.com/api/scrape', {
+      const response = await fetch('https://webscraping-backend-xpb5.onrender.com/api/scrape', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
