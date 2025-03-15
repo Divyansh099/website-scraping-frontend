@@ -1,60 +1,213 @@
-import React, { useState } from "react";
-import axios from "axios";
+document.addEventListener('DOMContentLoaded', () => {
+  // DOM elements
+  const scrapeForm = document.getElementById('scrape-form');
+  const urlInput = document.getElementById('url-input');
+  const scrapeButton = document.getElementById('scrape-button');
+  const buttonText = scrapeButton.querySelector('.button-text');
+  const spinner = scrapeButton.querySelector('.spinner');
+  const errorMessage = document.getElementById('error-message');
+  const resultsSection = document.getElementById('results-section');
+  const progressBarContainer = document.getElementById('progress-bar-container');
+  const progressBar = document.getElementById('progress-bar');
 
-const SitemapGenerator = () => {
-  const [url, setUrl] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  // Cards and content areas
+  const titleCard = document.getElementById('title-card');
+  const titleContent = document.getElementById('title-content');
+  const headingsCard = document.getElementById('headings-card');
+  const headingsContent = document.getElementById('headings-content');
+  const imagesCard = document.getElementById('images-card');
+  const imagesContent = document.getElementById('images-content');
+  const imagesCount = document.getElementById('images-count');
+  const linksCard = document.getElementById('links-card');
+  const linksContent = document.getElementById('links-content');
+  const linksCount = document.getElementById('links-count');
 
-  const generateSitemap = async () => {
+  // Form submission handler
+  scrapeForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const url = urlInput.value.trim();
+
     if (!url) {
-      setError("Please enter a valid URL");
+      showError('Please enter a valid URL');
       return;
     }
+
+    // Show loading state
     setLoading(true);
-    setError(null);
+    hideError();
+    hideResults();
+    showProgressBar();
+
     try {
-      const response = await axios.post(
-        "https://sitemap-generator-v8fa.onrender.com",
-        { url },
-        { responseType: "blob" }
-      );
-      
-      const blob = new Blob([response.data], { type: "application/xml" });
-      const link = document.createElement("a");
-      link.href = window.URL.createObjectURL(blob);
-      link.download = "sitemap.xml";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (err) {
-      setError("Failed to generate sitemap. Please try again.");
+      // Make request to our Render backend server
+      const response = await fetch('https://your-backend-api.onrender.com/api/scrape', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to scrape website');
+      }
+
+      // Display the results
+      displayResults(data.data);
+
+    } catch (error) {
+      showError(error.message || 'An error occurred while scraping the website');
+    } finally {
+      setLoading(false);
+      hideProgressBar();
     }
-    setLoading(false);
-  };
+  });
 
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
-      <div className="bg-white p-6 rounded-lg shadow-md max-w-lg w-full">
-        <h2 className="text-2xl font-semibold text-center mb-4">Sitemap Generator</h2>
-        <input
-          type="text"
-          className="w-full p-2 border rounded-lg mb-4"
-          placeholder="Enter website URL"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-        />
-        <button
-          className="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
-          onClick={generateSitemap}
-          disabled={loading}
-        >
-          {loading ? "Generating..." : "Generate Sitemap"}
-        </button>
-        {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
-      </div>
-    </div>
-  );
-};
+  // Helper functions
+  function setLoading(isLoading) {
+    if (isLoading) {
+      buttonText.textContent = 'Scraping...';
+      spinner.classList.remove('hidden');
+      scrapeButton.disabled = true;
+    } else {
+      buttonText.textContent = 'Scrape Website';
+      spinner.classList.add('hidden');
+      scrapeButton.disabled = false;
+    }
+  }
 
-export default SitemapGenerator;
+  function showError(message) {
+    errorMessage.textContent = message;
+    errorMessage.classList.remove('hidden');
+  }
+
+  function hideError() {
+    errorMessage.textContent = '';
+    errorMessage.classList.add('hidden');
+  }
+
+  function hideResults() {
+    resultsSection.classList.add('hidden');
+  }
+
+  function showProgressBar() {
+    progressBarContainer.classList.remove('hidden');
+    progressBar.value = 0;
+  }
+
+  function hideProgressBar() {
+    progressBarContainer.classList.add('hidden');
+  }
+
+  function updateProgressBar(value) {
+    progressBar.value = value;
+  }
+
+  function displayResults(data) {
+    // Clear previous content
+    titleContent.innerHTML = '';
+    headingsContent.innerHTML = '';
+    imagesContent.innerHTML = '';
+    linksContent.innerHTML = '';
+
+    // Show results section
+    resultsSection.classList.remove('hidden');
+
+    // Process and display titles
+    if (data.titles && data.titles.length > 0) {
+      titleContent.textContent = data.titles[0];
+      titleCard.classList.remove('hidden');
+    } else {
+      titleCard.classList.add('hidden');
+    }
+
+    // Process and display headings
+    if (data.headings && data.headings.length > 0) {
+      const headingsList = document.createElement('ul');
+
+      data.headings.forEach(heading => {
+        const li = document.createElement('li');
+        li.textContent = heading;
+        headingsList.appendChild(li);
+      });
+
+      headingsContent.appendChild(headingsList);
+      headingsCard.classList.remove('hidden');
+    } else {
+      headingsCard.classList.add('hidden');
+    }
+
+    // Process and display images
+    if (data.images && data.images.length > 0) {
+      const imagesList = document.createElement('ul');
+
+      // Display only first 10 images
+      const displayImages = data.images.slice(0, 10);
+
+      displayImages.forEach(src => {
+        const li = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = src;
+        link.textContent = src;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        li.appendChild(link);
+        imagesList.appendChild(li);
+      });
+
+      imagesContent.appendChild(imagesList);
+
+      // Show count and more info if needed
+      imagesCount.textContent = data.images.length;
+
+      if (data.images.length > 10) {
+        const moreInfo = document.createElement('p');
+        moreInfo.className = 'more-info';
+        moreInfo.textContent = `And ${data.images.length - 10} more images...`;
+        imagesContent.appendChild(moreInfo);
+      }
+
+      imagesCard.classList.remove('hidden');
+    } else {
+      imagesCard.classList.add('hidden');
+    }
+
+    // Process and display links
+    if (data.links && data.links.length > 0) {
+      const linksList = document.createElement('ul');
+
+      // Display only first 10 links
+      const displayLinks = data.links.slice(0, 10);
+
+      displayLinks.forEach(href => {
+        const li = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = href;
+        link.textContent = href;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        li.appendChild(link);
+        linksList.appendChild(li);
+      });
+
+      linksContent.appendChild(linksList);
+
+      // Show count and more info if needed
+      linksCount.textContent = data.links.length;
+
+      if (data.links.length > 10) {
+        const moreInfo = document.createElement('p');
+        moreInfo.className = 'more-info';
+        moreInfo.textContent = `And ${data.links.length - 10} more links...`;
+        linksContent.appendChild(moreInfo);
+      }
+
+      linksCard.classList.remove('hidden');
+    } else {
+      linksCard.classList.add('hidden');
+    }
+  }
+});
