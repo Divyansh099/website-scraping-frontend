@@ -1,233 +1,114 @@
-/* Base styles and resets */
-:root {
-    --primary-color: #4361ee;
-    --primary-hover: #3a56d4;
-    --background-color: #f8f9fa;
-    --card-bg: #ffffff;
-    --text-color: #333333;
-    --border-color: #e0e0e0;
-    --error-color: #e63946;
-    --success-color: #2ecc71;
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --border-radius: 8px;
-  }
-  
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    line-height: 1.6;
-  }
-  
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Header styles */
-  header {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-  
-  header h1 {
-    font-size: 2.5rem;
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
-  }
-  
-  header p {
-    font-size: 1.1rem;
-    color: #666;
-  }
-  
-  /* Form styles */
-  .input-section {
-    margin-bottom: 2rem;
-  }
-  
-  .input-group {
-    display: flex;
-    gap: 0.5rem;
-  }
-  
-  input[type="url"] {
-    flex: 1;
-    padding: 0.75rem 1rem;
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    transition: border-color 0.3s;
-  }
-  
-  input[type="url"]:focus {
-    outline: none;
-    border-color: var(--primary-color);
-  }
-  
-  button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-  }
-  
-  button:hover {
-    background-color: var(--primary-hover);
-  }
-  
-  button:disabled {
-    background-color: #a0a0a0;
-    cursor: not-allowed;
-  }
-  
-  .spinner {
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: white;
-    animation: spin 1s ease-in-out infinite;
-  }
-  
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  
-  .error-message {
-    color: var(--error-color);
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
-  }
-  
-  /* Results section */
-  .results-section {
-    flex: 1;
-  }
-  
-  .results-section h2 {
-    margin-bottom: 1.5rem;
-    text-align: center;
-    color: var(--primary-color);
-  }
-  
-  .card {
-    background-color: var(--card-bg);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    margin-bottom: 1.5rem;
-    overflow: hidden;
-  }
-  
-  .card-header {
-    background-color: #f8f9fa;
-    padding: 1rem;
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .card-header h3 {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 1.1rem;
-  }
-  
-  .count {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 0.2rem 0.5rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-  }
-  
-  .card-body {
-    padding: 1rem;
-  }
-  
-  .scrollable {
-    max-height: 300px;
-    overflow-y: auto;
-  }
-  
-  ul {
-    list-style-type: none;
-  }
-  
-  li {
-    margin-bottom: 0.5rem;
-    padding-left: 1.5rem;
-    position: relative;
-  }
-  
-  li:before {
-    content: '•';
-    position: absolute;
-    left: 0;
-    color: var(--primary-color);
-  }
-  
-  a {
-    color: var(--primary-color);
-    text-decoration: none;
-    word-break: break-all;
-  }
-  
-  a:hover {
-    text-decoration: underline;
-  }
-  
-  .more-info {
-    color: #666;
-    font-style: italic;
-    margin-top: 0.5rem;
-  }
-  
-  /* Footer styles */
-  footer {
-    text-align: center;
-    margin-top: 2rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
-    color: #666;
-  }
-  
-  footer i {
-    color: var(--error-color);
-  }
-  
-  /* Utility classes */
-  .hidden {
-    display: none;
-  }
-  
-  /* Responsive styles */
-  @media (max-width: 768px) {
-    .input-group {
-      flex-direction: column;
-    }
-    
-    button {
-      width: 100%;
-    }
-  }
+/* Import Google Font: Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+/* Reset default styles and apply global font */
+* {
+    margin: 0;  /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+    font-family: 'Poppins', sans-serif; /* Set Poppins as the default font */
+}
+
+/* Body Styling */
+body {
+    background: linear-gradient(135deg, #667eea, #764ba2); /* Gradient background */
+    color: white; /* White text color */
+    display: flex; /* Flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Full viewport height */
+    padding: 20px; /* Add padding for spacing */
+}
+
+/* Main container */
+.container {
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
+    padding: 30px; /* Add padding */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Shadow for 3D effect */
+    width: 100%; /* Responsive width */
+    max-width: 600px; /* Max width for better design */
+    text-align: center; /* Center text */
+    backdrop-filter: blur(10px); /* Blur effect for glass-like design */
+}
+
+/* Header Styling */
+header h1 {
+    font-size: 28px; /* Increase font size */
+}
+
+/* Input section */
+.input-section {
+    margin: 20px 0; /* Add margin to separate from other sections */
+}
+
+/* Input Field */
+input {
+    width: 80%; /* Take up most of the space */
+    padding: 12px; /* Add padding for better appearance */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    outline: none; /* Remove outline on focus */
+}
+
+/* Submit Button */
+button {
+    background: #ff6b6b; /* Reddish background */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 12px 15px; /* Padding for better clickability */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    border-radius: 5px; /* Rounded corners */
+    margin-left: 10px; /* Spacing between input and button */
+    transition: 0.3s; /* Smooth transition */
+}
+
+/* Button Hover Effect */
+button:hover {
+    background: #ff4757; /* Darker red on hover */
+}
+
+/* Progress Bar Section */
+.progress-section {
+    display: none; /* Initially hidden */
+    margin-top: 15px; /* Add spacing above */
+}
+
+/* Progress Bar Container */
+.progress-container {
+    width: 100%; /* Full width */
+    height: 8px; /* Set height */
+    background: rgba(255, 255, 255, 0.2); /* Light gray background */
+    border-radius: 5px; /* Rounded corners */
+    overflow: hidden; /* Ensure smooth animation */
+}
+
+/* Progress Bar Fill */
+.progress-bar {
+    height: 100%; /* Full height */
+    width: 0%; /* Initially empty */
+    background: #4CAF50; /* Green color */
+    transition: width 0.3s ease-in-out; /* Smooth width animation */
+}
+
+/* Scraped Data Section */
+.result-section {
+    margin-top: 20px; /* Add spacing */
+    text-align: left; /* Align text to the left */
+    max-height: 300px; /* Limit height for scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 10px; /* Add padding */
+    background: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
+    border-radius: 5px; /* Rounded corners */
+}
+
+/* Scraped Data Header */
+.result-section h2 {
+    text-align: center; /* Center the heading */
+}
+
+/* Output Data */
+#output {
+    font-size: 14px; /* Set smaller font */
+    word-wrap: break-word; /* Ensure long text wraps properly */
+}
