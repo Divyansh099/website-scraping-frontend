@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "Frontend for web scraping project",
   "main": "index.js",
-  "scripts": {
-    "start": "live-server --port=3000",
-    "build": "echo 'No build step needed'"
+  "scripts": "scripts": {
+    "build": "esbuild src/script.js --bundle --minify --outfile=dist/script.js && cleancss -o dist/styles.css src/styles.css",
+    "start": "npm run build && netlify dev"
+
   },
   "dependencies": {
     "axios": "^1.6.0"
